@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>React Native Android</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h1>React Native Android</h1>
+          <h2>An Intro!</h2>
+          <h4>Software Engineering Club</h4>
+          <h4>Rm 6-12. Jan 20. 11am</h4>
+            <img src="img/react.png" height="100" width="100" style="border: 0; background: 0"/>
+            <img src="img/android-logo.png" width="100" height="100" style="border: 0; background: 0"/>
+          <p>
+            <small>Christine Yu / <a href="http://github.com/cy">http://github.com/cy</a></small>
+          </p>
+        </section>
+        <section data-markdown>
+          What
+          =======
+          - framework to build Native mobile apps using JS and React
+          - used by fb for Groups and Ads manager apps
+          - iOS: Jan 2015, Android: Sept 2015
+        </section>
+        <section data-markdown>
+          Why Not __
+          =========
+            - Native SDKs
+              - learning curve: seperate paradigms
+              - maintaince: seperate codebases
+              - compiling takes a long time
+        </section>
+        <section>
+          <ul>
+            <li>Cordova/PhoneGap</li>
+              <ul>
+                <li>wrapped webview feels toyish</li>
+                <li>slow performance</li>
+              </ul>
+              <li>NativeScript</li>
+                <ul>
+                  <li>no react! imperative</li>
+                </ul>
+              <li>Crosscompiled Xamarin (C#), Marmalade (C++)</li>
+                <ul>
+                  <li>can't use native SDK elements</li>
+                  <li>doesn't look native on any platform</li>
+                  <li>lots of control, very manual</li>
+                </ul>
+          </ul>
+          <aside class="notes">
+            - using a compiler to compile code down to binaries that will run on a different platform.
+            - Marmalade use GCC ARM to compile for Android, GCC x86 to compile for simulator (has own simulator)
+          </aside>
+        </section>
+        <section data-markdown>
+          Why React Native?
+          ========
+          - "learn once, write everywhere"
+          - JS (ships with mix of es6 and es7 Babel transforms)
+            - https://facebook.github.io/react-native/docs/javascript-environment.html
+            - can use any editor (not boxed into XCode/Eclipse/Android Studio)
+          - turly native
+        </section>
+        <section data-markdown>
+          React Basics
+          ===========
+          - Declarative approach
+          - everything is a component (vs controllers, directives, services in Angular 1)
+          - component communication via props
+          - solves the problem of stateful ui by rerendering UI whenever the state or props changes
+            - calculates a diff
+
+          ```javascript
+          render() {
+            return(
+              &lt;View&gt;
+                &lt;Text&gt;Hello World!&lt;/Text&gt;
+              &lt;/View&gt;
+            );
+          }
+          ```
+        </section>
+        <section data-markdown>
+          React Native Basics
+          ==================
+          - JSX wraps native elemts:
+            - View, ListView
+            - Text
+            - TouchableOpacity, TouchableHighLight
+            - Navigator
+          - Subset of CSS properties to style
+            - Flexbox for layout
+        </section>
+        <section data-markdown>
+          ##How does Native work?
+          ![under the hood](./img/under-the-hood.png)
+          Under the Hood of React Native talk, https://www.youtube.com/watch?v=8N4f4h6SThc)
+          - JS running in JavaScriptCore JSVM controlling Native through a C++/Java bridge
+       </section>
+       <section data-markdown>
+          - platform specific code are 'infixed' by platform name
+          - packager starts a local webserver and sends a JS bundle to device
+              ```
+              &lt;Text /&gt; => new TextView(getContext());
+              ```
+          - Can define your own & publish: https://react.parts/native
+            ![react-parts](./img/react-parts.png)
+
+          Note:
+            - gradle to assemble release apk
+            - Native asks to start the app, and starts JSVM
+            - JSVM runs developer's JS code, ie. give me some views
+            - goes back to Native, Native goes here are some views
+            - solves potential bottlenecks by running three threads, UI Event Queue, Native Modules Event Queue and JS Event Queue
+        </section>
+        <section data-markdown>
+          ![quote](./img/quote.png)
+        </section>
+        <section>
+          <h3>dev Setup</h3>
+          <img src="./img/AndroidSDK2.png">
+        </section>
+        <section data-markdown>
+          ##running for dev
+          ```
+          $ react-native init # generates hello world proj
+          $ react-native start # starts local webserver
+          $ adb reverse tcp:8081 tcp:8081 # enables device GET of js bundle from local webserver
+          $ react-native run-android # starts the app on device
+          ```
+          ##packaging apk
+          ```
+          $./gradlew assembleRelease
+          ```
+        </section>
+        <section data-markdown>
+          tools
+          ===========
+          - android monitor
+          - android avd emulator (slow even with accelerator, test on device)
+          - live reloading or shake to reload
+          - chrome debugger
+          - element inspector
+        </section>
+        <section data-markdown>
+          cons
+          =======
+          - Navigator awkward to use
+            - pass props in the route?
+            - switch statement in render?
+          - Reload always restarts at the first scene
+            - trick: set the intial scene to the one you're working on
+          - Still new
+            - few modules (no offical camera, accelerometer apis)
+        </section>
+        <section>
+          - unexpected, not to spec errors:<br />
+          <pre><code data-trim data-noescape>
+           &lt;View style={{borderWidth: 1, ...style}}&gt;
+          </code></pre>
+          <img src="./img/GA2OS.png" height="400">
+          <pre><code data-trim data-noescape>
+            &lt;View style={[{paddingLeft:1}, ...style]}&gt;
+          </code></pre>
+        </section>
+        <section data-markdown>
+          ## extras
+          - app I wrote before this talk
+            - https://github.com/cy/kanaspeed
+          - boiler plate app w/ redux
+            - https://github.com/FormidableLabs/formidable-react-native-app-boilerplate
+          - react native playground
+            - https://rnplay.org/
+          - these slides
+            - https://github.com/cy/react-native-talk
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
